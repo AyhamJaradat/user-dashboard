@@ -1,0 +1,19 @@
+.wrapper {
+    height: calc(100% - 64px);
+    overflow: auto;
+}
+
+.list {
+  margin: 8px auto;
+  max-width: 400px;
+}
+.card {
+    margin-bottom: 32px;
+  max-width: 400px;
+  &-header-image {
+    .avatar {
+      width: 40px;
+      height: 40px;
+    }
+  }
+}
