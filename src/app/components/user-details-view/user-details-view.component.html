@@ -1,0 +1,34 @@
+<div *ngIf="userDetails$ | async as userDetails">
+  <mat-card class="card">
+    <mat-card-header>
+      <div mat-card-avatar class="card-header-image">
+        <img mat-card-image class="avatar" [src]="userDetails.avatar" />
+      </div>
+      <mat-card-title>
+        {{ userDetails.first_name }} {{ userDetails.last_name }}
+      </mat-card-title>
+      <mat-card-subtitle>{{ userDetails.email }}</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <mat-divider></mat-divider>
+      <div class="info">
+        <img mat-card-xl-image [src]="userDetails.avatar" />
+        <mat-list role="list">
+          <mat-list-item role="listitem">
+            <h2>
+              Full Name: {{ userDetails.first_name }}
+              {{ userDetails.last_name }}
+            </h2>
+          </mat-list-item>
+          <mat-list-item role="listitem">
+            <p>Email: {{ userDetails.email }}</p></mat-list-item
+          >
+          <mat-list-item role="listitem">
+            <p>User Id: {{ userDetails.id }}</p></mat-list-item
+          >
+        </mat-list>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

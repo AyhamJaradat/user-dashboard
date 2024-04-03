@@ -1,0 +1,21 @@
+.card {
+  margin-bottom: 32px;
+  cursor: pointer;
+  width: 700px;
+  max-width: calc(100% - 32px);
+  margin: 16px auto;
+  &-header-image {
+    .avatar {
+      width: 40px;
+      height: 40px;
+    }
+  }
+
+  .info {
+    padding: 8px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+  }
+}

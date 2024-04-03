@@ -1,6 +1,6 @@
 <div class="wrapper">
   <div class="list">
-    <mat-card class="card" *ngFor="let item of userItems$ | async">
+    <mat-card class="card" *ngFor="let item of userItems$ | async" routerLink="/user/{{item.id}}">
       <mat-card-header>
         <div mat-card-avatar class="card-header-image">
           <img
@@ -18,7 +18,7 @@
         <mat-divider></mat-divider>
       </mat-card-content>
       <mat-card-actions>
-        <button mat-button>View detials</button>
+        <button  mat-flat-button color="primary">View detials</button>
       </mat-card-actions>
       <mat-card-footer> </mat-card-footer>
     </mat-card>
