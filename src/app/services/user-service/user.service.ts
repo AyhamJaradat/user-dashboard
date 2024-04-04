@@ -1,7 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, map } from 'rxjs';
-import { User, UsersResponse } from '../../models/user.interface';
+import {
+  User,
+  UserDetails,
+  UserDetailsResponse,
+  UsersResponse,
+} from '../../models/user.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -19,9 +24,14 @@ export class UserService {
     );
   }
 
-  public fetchUser(userId: number): Observable<User> {
+  public fetchUser(userId: number): Observable<UserDetails> {
     return this.httpClient
-      .get<User>(`${this.API_BASE_URL}users/${userId}`)
-      .pipe(map((resp: any) => resp.data));
+      .get<UserDetailsResponse>(`${this.API_BASE_URL}users/${userId}`)
+      .pipe(
+        map((resp: UserDetailsResponse) => ({
+          ...resp.data,
+          support: resp.support,
+        }))
+      );
   }
 }

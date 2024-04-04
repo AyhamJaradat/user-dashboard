@@ -1,5 +1,5 @@
 button {
-    margin: 32px;
+  margin: 32px;
 }
 .card {
   margin-bottom: 32px;
@@ -20,5 +20,9 @@ button {
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
+    &-more {
+      margin: 32px;
+      font-style: italic;
+    }
   }
 }

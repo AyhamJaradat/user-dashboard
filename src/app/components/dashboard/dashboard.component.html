@@ -1,18 +1,9 @@
 <div class="wrapper">
-  <mat-paginator
-    *ngIf="totalNumberOfItems > 0"
-    [length]="totalNumberOfItems"
-    [pageSize]="pageSize"
-    [showFirstLastButtons]="true"
-    [pageSizeOptions]="[5, 10, 25, 100]"
-    (page)="handlePageEvent($event)"
-    aria-label="Select page"
-  >
-  </mat-paginator>
+  <ng-container *ngTemplateOutlet="paginatoTemplate"> </ng-container>
   <div class="list">
     <mat-card
       class="card"
-      *ngFor="let item of userItems$ | async"
+      *ngFor="let item of usersInPage$ | async"
       routerLink="/user/{{ item.id }}"
     >
       <mat-card-header>
@@ -33,16 +24,18 @@
       <mat-card-footer> </mat-card-footer>
     </mat-card>
   </div>
+  <ng-container *ngTemplateOutlet="paginatoTemplate"> </ng-container>
 
-  <mat-paginator
-    *ngIf="totalNumberOfItems > 0"
-    [length]="totalNumberOfItems"
-    [pageSize]="pageSize"
-    [showFirstLastButtons]="true"
-    [pageSizeOptions]="[5, 10, 25, 100]"
-    (page)="handlePageEvent($event)"
-    aria-label="Select page"
-  >
-  </mat-paginator>
-  <!--   [pageIndex]="pageIndex" -->
+  <ng-template #paginatoTemplate>
+    <mat-paginator
+      *ngIf="totalNumberOfItems > 0"
+      [length]="totalNumberOfItems"
+      [pageSize]="pageSize"
+      [pageIndex]="currentPageIndex"
+      [pageSizeOptions]="[5, 10, 25, 100]"
+      (page)="handlePageEvent($event)"
+      aria-label="Select page"
+    >
+    </mat-paginator>
+  </ng-template>
 </div>

@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { MatListModule } from '@angular/material/list';
 import { MatCardModule } from '@angular/material/card';
 import { User } from '../../models/user.interface';
 import { UserService } from '../../services/user-service/user.service';
@@ -20,6 +19,10 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { Paginator } from '../../models/paginator.interface';
 import { HeaderService } from '../../services/header-service/header.service';
+import { Store, select } from '@ngrx/store';
+import { UserState } from '../../store/user/user.state';
+import { selectUsers, selectUsersPage } from '../../store/user/user.selector';
+import { getUsersAction } from '../../store/user/user.action';
 
 @Component({
   selector: 'app-dashboard',
@@ -38,14 +41,20 @@ import { HeaderService } from '../../services/header-service/header.service';
 export class DashboardComponent implements OnInit {
   totalNumberOfItems: number = 0;
   pageSize: number = 5;
+  currentPageIndex: number = 0;
+
+  allUsers$: Observable<Array<User>> = this.store.pipe(select(selectUsers));
 
   constructor(
-    private userService: UserService,
-    private headerService: HeaderService
+    private headerService: HeaderService,
+    private store: Store<UserState>
   ) {}
 
   ngOnInit(): void {
     this.headerService.showSearchBar(true);
+    this.pagination$.subscribe((paginator) => {
+      this.fetchUsersPage(paginator.pageIndex, paginator.pageSize);
+    });
   }
 
   private pagination$ = new BehaviorSubject<Paginator>({
@@ -55,19 +64,18 @@ export class DashboardComponent implements OnInit {
 
   searchChange$ = this.headerService.searchChange$.pipe(debounceTime(250));
 
-  userItems$: Observable<User[]> = this.pagination$.pipe(
-    tap(paginator => {
-      this.pageSize = paginator.pageSize
+  usersInPage$: Observable<User[]> = this.pagination$.pipe(
+    tap((paginator) => {
+      this.pageSize = paginator.pageSize;
+      this.currentPageIndex = paginator.pageIndex - 1;
     }),
     switchMap((paginator) =>
-      this.userService
-        .fetchAllUsers(paginator.pageIndex, paginator.pageSize)
+      this.store
+        .pipe(select(selectUsersPage(paginator.pageIndex, paginator.pageSize)))
         .pipe(
           switchMap((resp) => combineLatest([of(resp), this.searchChange$])),
-          tap(([usersResponse, searchValue]) =>
-            console.log('Users', usersResponse, searchValue)
-          ),
           map(([usersResponse, searchValue]) => {
+            console.log('usersResponse', usersResponse);
             if (searchValue !== '') {
               // Hide paginator when displaying the filtered results
               this.totalNumberOfItems = 0;
@@ -83,8 +91,11 @@ export class DashboardComponent implements OnInit {
     )
   );
 
+  fetchUsersPage(page: number, perPage: number) {
+    this.store.dispatch(getUsersAction({ page, perPage }));
+  }
+
   handlePageEvent(e: PageEvent) {
-    console.log('page', e);
     this.pagination$.next({
       pageIndex: e.pageIndex + 1,
       pageSize: e.pageSize,
