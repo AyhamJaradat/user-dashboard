@@ -1,3 +1,11 @@
+<button
+  mat-stroked-button
+  color="primary"
+  matTooltip="Go Back to Dashboard"
+  routerLink="/"
+>
+  Back
+</button>
 <div *ngIf="userDetails$ | async as userDetails">
   <mat-card class="card">
     <mat-card-header>

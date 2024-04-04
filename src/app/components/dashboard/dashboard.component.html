@@ -1,16 +1,26 @@
 <div class="wrapper">
+  <mat-paginator
+    *ngIf="totalNumberOfItems > 0"
+    [length]="totalNumberOfItems"
+    [pageSize]="pageSize"
+    [showFirstLastButtons]="true"
+    [pageSizeOptions]="[5, 10, 25, 100]"
+    (page)="handlePageEvent($event)"
+    aria-label="Select page"
+  >
+  </mat-paginator>
   <div class="list">
-    <mat-card class="card" *ngFor="let item of userItems$ | async" routerLink="/user/{{item.id}}">
+    <mat-card
+      class="card"
+      *ngFor="let item of userItems$ | async"
+      routerLink="/user/{{ item.id }}"
+    >
       <mat-card-header>
         <div mat-card-avatar class="card-header-image">
-          <img
-            mat-card-image
-            class="avatar"
-            [src]="item.avatar"
-          />
+          <img mat-card-image class="avatar" [src]="item.avatar" />
         </div>
         <mat-card-title>
-            {{ item.first_name }} {{ item.last_name }}
+          {{ item.first_name }} {{ item.last_name }}
         </mat-card-title>
         <mat-card-subtitle>{{ item.email }}</mat-card-subtitle>
       </mat-card-header>
@@ -18,9 +28,21 @@
         <mat-divider></mat-divider>
       </mat-card-content>
       <mat-card-actions>
-        <button  mat-flat-button color="primary">View detials</button>
+        <button mat-flat-button color="primary">View detials</button>
       </mat-card-actions>
       <mat-card-footer> </mat-card-footer>
     </mat-card>
   </div>
+
+  <mat-paginator
+    *ngIf="totalNumberOfItems > 0"
+    [length]="totalNumberOfItems"
+    [pageSize]="pageSize"
+    [showFirstLastButtons]="true"
+    [pageSizeOptions]="[5, 10, 25, 100]"
+    (page)="handlePageEvent($event)"
+    aria-label="Select page"
+  >
+  </mat-paginator>
+  <!--   [pageIndex]="pageIndex" -->
 </div>
