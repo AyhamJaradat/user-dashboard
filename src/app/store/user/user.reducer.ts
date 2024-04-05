@@ -20,7 +20,7 @@ export const initialState: UserState = {
 
 export const UserReducer = createReducer(
   initialState,
-  on(getUsersAction, (state, { page, perPage }) => ({
+  on(getUsersAction, (state) => ({
     ...state,
   })),
   on(getUsersSuccessAction, (state, { users, page, per_page, total }) => ({
@@ -37,7 +37,7 @@ export const UserReducer = createReducer(
     ...state,
   })),
 
-  on(getUserDetailsAction, (state, { userId }) => ({
+  on(getUserDetailsAction, (state) => ({
     ...state,
   })),
   on(getUserDetailsSuccessAction, (state, { userDetails }) => {

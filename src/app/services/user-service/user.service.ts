@@ -1,8 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, catchError, map, of } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import {
-  User,
   UserDetails,
   UserDetailsResponse,
   UsersResponse,
@@ -17,7 +16,7 @@ export class UserService {
 
   public fetchAllUsers(
     page: number = 1,
-    perPage = 10
+    perPage = 5
   ): Observable<UsersResponse> {
     return this.httpClient.get<UsersResponse>(
       `${this.API_BASE_URL}users?page=${page}&per_page=${perPage}`

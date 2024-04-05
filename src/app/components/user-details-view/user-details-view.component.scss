@@ -1,37 +1,32 @@
-button {
-  margin: 32px;
-
-}
-.card {
-  margin-bottom: 32px;
-  cursor: pointer;
-  width: 700px;
-  max-width: calc(100% - 32px);
-  margin: 16px auto;
-  &-header-image {
-    .avatar {
-      width: 40px;
-      height: 40px;
-    }
-  }
-
-  .info {
-    padding: 8px;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    &-more {
-      margin: 32px;
-      font-style: italic;
-    }
-  }
-}
-
 .wrapper {
   height: calc(100% - 165px);
   overflow: auto;
   position: relative;
+  .card {
+    margin-bottom: 32px;
+    cursor: pointer;
+    width: 700px;
+    max-width: calc(100% - 32px);
+    margin: 16px auto;
+    &-header-image {
+      .avatar {
+        width: 40px;
+        height: 40px;
+      }
+    }
+
+    .info {
+      padding: 8px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      &-more {
+        margin: 32px;
+        font-style: italic;
+      }
+    }
+  }
   .spinner {
     position: absolute;
     top: 0;
@@ -43,4 +38,8 @@ button {
     align-items: center;
     justify-content: center;
   }
+}
+
+button {
+  margin: 32px;
 }

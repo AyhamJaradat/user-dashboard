@@ -22,7 +22,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     FormsModule,
     MatFormFieldModule,
     RouterModule,
-    MatTooltipModule
+    MatTooltipModule,
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',

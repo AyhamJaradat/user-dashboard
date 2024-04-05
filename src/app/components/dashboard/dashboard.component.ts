@@ -1,16 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { User } from '../../models/user.interface';
-import { UserService } from '../../services/user-service/user.service';
 import {
   BehaviorSubject,
   Observable,
-  Subscription,
+  Subject,
   combineLatest,
   debounceTime,
   map,
   of,
   switchMap,
+  takeUntil,
   tap,
 } from 'rxjs';
 import { CommonModule } from '@angular/common';
@@ -22,7 +22,7 @@ import { Paginator } from '../../models/paginator.interface';
 import { HeaderService } from '../../services/header-service/header.service';
 import { Store, select } from '@ngrx/store';
 import { UserState } from '../../store/user/user.state';
-import { selectUsers, selectUsersPage } from '../../store/user/user.selector';
+import { selectUsersPage } from '../../store/user/user.selector';
 import { getUsersAction } from '../../store/user/user.action';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
@@ -41,13 +41,21 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, OnDestroy {
   totalNumberOfItems: number = 0;
   pageSize: number = 5;
   currentPageIndex: number = 0;
   isLoading: boolean = true;
 
-  allUsers$: Observable<Array<User>> = this.store.pipe(select(selectUsers));
+  private distroy$ = new Subject<void>();
+  private searchChange$ = this.headerService.searchChange$.pipe(
+    debounceTime(250)
+  );
+
+  private pagination$ = new BehaviorSubject<Paginator>({
+    pageIndex: 1,
+    pageSize: 5,
+  });
 
   constructor(
     private headerService: HeaderService,
@@ -56,17 +64,15 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.headerService.showSearchBar(true);
-    this.pagination$.subscribe((paginator) => {
+    this.pagination$.pipe(takeUntil(this.distroy$)).subscribe((paginator) => {
       this.fetchUsersPage(paginator.pageIndex, paginator.pageSize);
     });
   }
 
-  private pagination$ = new BehaviorSubject<Paginator>({
-    pageIndex: 1,
-    pageSize: 5,
-  });
-
-  searchChange$ = this.headerService.searchChange$.pipe(debounceTime(250));
+  ngOnDestroy(): void {
+    this.distroy$.next();
+    this.distroy$.complete();
+  }
 
   usersInPage$: Observable<User[]> = this.pagination$.pipe(
     tap((paginator) => {

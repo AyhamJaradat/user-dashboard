@@ -23,12 +23,7 @@ import {
   selectUsersDetail,
 } from './user.selector';
 import { of } from 'rxjs';
-import {
-  MatDialog,
-  MAT_DIALOG_DATA,
-  MatDialogTitle,
-  MatDialogContent,
-} from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { ErrorDialogComponent } from '../../components/error-dialog/error-dialog.component';
 
 @Injectable()

@@ -10,11 +10,13 @@ export const selectUsers = createSelector(
   (state: UserState) => state.users
 );
 
+// get  users detail list
 export const selectUsersDetail = createSelector(
   selectUserState,
   (state: UserState) => state.userDetails
 );
 
+// get total number of users
 export const selectTotalUsersNumber = createSelector(
   selectUserState,
   (state: UserState) => state.total

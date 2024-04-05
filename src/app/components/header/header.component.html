@@ -13,8 +13,12 @@
     *ngIf="headerService.showSearchBar$ | async"
   >
     <mat-label>Search by user id ...</mat-label>
-    <input matInput type="text" [(ngModel)]="searchValue"
-    (ngModelChange)="onSerchValueChange()" />
+    <input
+      matInput
+      type="text"
+      [(ngModel)]="searchValue"
+      (ngModelChange)="onSerchValueChange()"
+    />
 
     <button
       *ngIf="searchValue"
