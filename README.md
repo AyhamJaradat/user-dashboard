@@ -2,6 +2,40 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.3.
 
+**Description**
+
+This a show case project to demonstrate proficiency in Angular 17
+
+The project is an interactive user dashboard
+
+It consist of a user dashboad view that fetches and lists the users from an end-point
+and a user detail view that fetches and shows the selected user details.
+
+**Features**
+
+- Responsive UI
+- State management and caching techniques using NgRx
+- Utilize observables from RxJS
+- Using Angular Material components
+- Pagination and filtering
+- Smooth user experience
+- Error Handling
+
+## ScreenShots :
+
+![screenshot1](/screen_shots/Home.png)
+
+![screenshot1](/screen_shots/DetailsView.png)
+
+![screenshot1](/screen_shots/Search.png)
+
+![screenshot1](/screen_shots/Responsive.png)
+
+![screenshot1](/screen_shots/ErrorHandling.png)
+
+
+
+
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
