@@ -1,6 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { catchError, map, switchMap, withLatestFrom } from 'rxjs/operators';
+import {
+  catchError,
+  map,
+  switchMap,
+  tap,
+  withLatestFrom,
+} from 'rxjs/operators';
 import {
   getUserDetailsAction,
   getUserDetailsFaliureAction,
@@ -17,6 +23,13 @@ import {
   selectUsersDetail,
 } from './user.selector';
 import { of } from 'rxjs';
+import {
+  MatDialog,
+  MAT_DIALOG_DATA,
+  MatDialogTitle,
+  MatDialogContent,
+} from '@angular/material/dialog';
+import { ErrorDialogComponent } from '../../components/error-dialog/error-dialog.component';
 
 @Injectable()
 export class UserEffects {
@@ -38,17 +51,30 @@ export class UserEffects {
             total: -1,
           });
         } else {
-          return this.userService.fetchAllUsers(page, perPage);
+          return this.userService.fetchAllUsers(page, perPage).pipe(
+            catchError((error) => {
+              return of({
+                data: [],
+                page: -1,
+                per_page: -1,
+                total: -10,
+              });
+            })
+          );
         }
       }),
-      map((resp) =>
-        getUsersSuccessAction({
-          users: resp.data,
-          page: resp.page,
-          per_page: resp.per_page,
-          total: resp.total,
-        })
-      ),
+      map((resp) => {
+        if (resp.total === -10) {
+          return getUsersFaliureAction();
+        } else {
+          return getUsersSuccessAction({
+            users: resp.data,
+            page: resp.page,
+            per_page: resp.per_page,
+            total: resp.total,
+          });
+        }
+      }),
       catchError((error) => of(getUsersFaliureAction()))
     )
   );
@@ -63,21 +89,41 @@ export class UserEffects {
           // data already exists in the store
           return of(user);
         } else {
-          return this.userService.fetchUser(userId);
+          return this.userService.fetchUser(userId).pipe(
+            catchError((error) => {
+              return of(null);
+            })
+          );
         }
       }),
-      map((resp) =>
-        getUserDetailsSuccessAction({
-          userDetails: resp,
-        })
-      ),
+      map((resp) => {
+        if (resp === null) {
+          return getUserDetailsFaliureAction();
+        } else {
+          return getUserDetailsSuccessAction({
+            userDetails: resp,
+          });
+        }
+      }),
       catchError((error) => of(getUserDetailsFaliureAction()))
     )
+  );
+
+  error$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(getUsersFaliureAction, getUserDetailsFaliureAction),
+        tap(() => {
+          this.dialog.open(ErrorDialogComponent);
+        })
+      ),
+    { dispatch: false }
   );
 
   constructor(
     private actions$: Actions,
     private userService: UserService,
-    private store: Store
+    private store: Store,
+    public dialog: MatDialog
   ) {}
 }

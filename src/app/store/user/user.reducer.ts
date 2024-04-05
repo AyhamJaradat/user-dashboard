@@ -2,6 +2,7 @@ import { createReducer, on } from '@ngrx/store';
 import { UserState } from './user.state';
 import {
   getUserDetailsAction,
+  getUserDetailsFaliureAction,
   getUserDetailsSuccessAction,
   getUsersAction,
   getUsersFaliureAction,
@@ -49,7 +50,7 @@ export const UserReducer = createReducer(
         : [...state.userDetails, userDetails],
     };
   }),
-  on(getUsersFaliureAction, (state) => ({
+  on(getUserDetailsFaliureAction, (state) => ({
     ...state,
   }))
 );

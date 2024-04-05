@@ -12,6 +12,7 @@ import { UserState } from '../../store/user/user.state';
 import { Store, select } from '@ngrx/store';
 import { getUserDetailsAction } from '../../store/user/user.action';
 import { selectUserById } from '../../store/user/user.selector';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-user-details-view',
@@ -24,11 +25,14 @@ import { selectUserById } from '../../store/user/user.selector';
     MatButtonModule,
     MatTooltipModule,
     RouterModule,
+    MatProgressSpinnerModule,
   ],
   templateUrl: './user-details-view.component.html',
   styleUrl: './user-details-view.component.scss',
 })
 export class UserDetailsViewComponent implements OnInit {
+  isLoading: boolean = true;
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private headerService: HeaderService,
@@ -44,8 +48,10 @@ export class UserDetailsViewComponent implements OnInit {
   );
   userDetails$ = this.userId$.pipe(
     tap((userId) => {
+      this.isLoading = true;
       this.store.dispatch(getUserDetailsAction({ userId }));
     }),
-    switchMap((userId) => this.store.pipe(select(selectUserById(userId))))
+    switchMap((userId) => this.store.pipe(select(selectUserById(userId)))),
+    tap(() => (this.isLoading = false))
   );
 }

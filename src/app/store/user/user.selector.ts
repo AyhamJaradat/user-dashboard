@@ -23,7 +23,6 @@ export const selectTotalUsersNumber = createSelector(
 // Get one User by user Id
 export const selectUserById = (userId: number) =>
   createSelector(selectUsersDetail, (userDetails) => {
-    console.log("Hello", userDetails);
     return userDetails.find((user) => user.id === userId);
   });
 

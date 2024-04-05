@@ -33,7 +33,6 @@ export class HeaderComponent {
   constructor(public headerService: HeaderService) {}
 
   onSerchValueChange() {
-    console.log(this.searchValue);
     this.headerService.searchChange$.next(this.searchValue.trim());
   }
 

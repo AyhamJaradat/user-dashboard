@@ -5,6 +5,7 @@ import { UserService } from '../../services/user-service/user.service';
 import {
   BehaviorSubject,
   Observable,
+  Subscription,
   combineLatest,
   debounceTime,
   map,
@@ -23,6 +24,7 @@ import { Store, select } from '@ngrx/store';
 import { UserState } from '../../store/user/user.state';
 import { selectUsers, selectUsersPage } from '../../store/user/user.selector';
 import { getUsersAction } from '../../store/user/user.action';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-dashboard',
@@ -34,6 +36,7 @@ import { getUsersAction } from '../../store/user/user.action';
     MatButtonModule,
     MatDividerModule,
     MatPaginatorModule,
+    MatProgressSpinnerModule,
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
@@ -42,6 +45,7 @@ export class DashboardComponent implements OnInit {
   totalNumberOfItems: number = 0;
   pageSize: number = 5;
   currentPageIndex: number = 0;
+  isLoading: boolean = true;
 
   allUsers$: Observable<Array<User>> = this.store.pipe(select(selectUsers));
 
@@ -68,6 +72,7 @@ export class DashboardComponent implements OnInit {
     tap((paginator) => {
       this.pageSize = paginator.pageSize;
       this.currentPageIndex = paginator.pageIndex - 1;
+      this.isLoading = true;
     }),
     switchMap((paginator) =>
       this.store
@@ -75,7 +80,6 @@ export class DashboardComponent implements OnInit {
         .pipe(
           switchMap((resp) => combineLatest([of(resp), this.searchChange$])),
           map(([usersResponse, searchValue]) => {
-            console.log('usersResponse', usersResponse);
             if (searchValue !== '') {
               // Hide paginator when displaying the filtered results
               this.totalNumberOfItems = 0;
@@ -86,7 +90,8 @@ export class DashboardComponent implements OnInit {
               this.totalNumberOfItems = usersResponse.total;
               return usersResponse.data;
             }
-          })
+          }),
+          tap(() => (this.isLoading = false))
         )
     )
   );
